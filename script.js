@@ -18,8 +18,8 @@ function createParticles() {
       y: centralMass.y,
       vx: (Math.random() - 0.5) * 6, // Velocità casuale
       vy: (Math.random() - 0.5) * 6,
-      size: Math.random() * 3 + 2, // Dimensione casuale tra 2 e 5
-      color: `hsl(${Math.random() * 360}, 100%, 70%)`, // Colore casuale
+      size: Math.random() * 3 + 1, // Dimensione casuale tra 1 e 4
+      color: 'rgba(255, 255, 255, 0.8)', // Particelle bianche semi-trasparenti
     });
   }
 }
@@ -27,10 +27,10 @@ function createParticles() {
 // Disegna il testo descrittivo
 function drawDescription() {
   ctx.fillStyle = 'white';
-  ctx.font = '18px Arial';
+  ctx.font = '16px Arial';
   ctx.fillText(
-    'Simulazione: La massa centrale proietta particelle che si disperdono nello spaziotempo.',
-    10,
+    'Simulazione dello spaziotempo: La massa centrale curva lo spazio e proietta particelle.',
+    20,
     30
   );
 }
@@ -46,7 +46,7 @@ function drawCentralMass() {
     centralMass.y,
     centralMass.radius * 2
   );
-  gradient.addColorStop(0, 'rgba(138, 43, 226, 0.5)');
+  gradient.addColorStop(0, 'rgba(138, 43, 226, 0.4)');
   gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = gradient;
   ctx.beginPath();
@@ -66,9 +66,6 @@ function drawParticles() {
     // Aggiorna posizione
     particle.x += particle.vx;
     particle.y += particle.vy;
-
-    // Cambia colore dinamicamente
-    particle.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
 
     // Disegna particella
     ctx.fillStyle = particle.color;
@@ -94,7 +91,7 @@ function drawParticles() {
 // Loop di animazione
 function animate() {
   // Sfondo trasparente per scie fluide
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawDescription(); // Disegna il testo descrittivo
