@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Massa e griglia
+// Massa e particelle
 const masses = [];
 const particles = [];
 const gridSize = 30;
@@ -16,7 +16,6 @@ function drawGrid() {
     for (let y = 0; y < canvas.height; y += gridSize) {
       let dx = 0, dy = 0;
 
-      // Calcolo deformazione della griglia
       masses.forEach(mass => {
         const distance = Math.sqrt((x - mass.x) ** 2 + (y - mass.y) ** 2);
         const force = mass.mass / (distance || 1);
@@ -42,7 +41,7 @@ function drawMasses() {
   });
 }
 
-// Particelle che si muovono nello spaziotempo
+// Funzione per aggiornare e disegnare particelle
 function updateParticles() {
   particles.forEach(particle => {
     let ax = 0, ay = 0;
@@ -71,18 +70,22 @@ function updateParticles() {
   });
 }
 
-// Aggiungi massa con un click
+// Aggiungi massa e particelle con un click
 canvas.addEventListener('click', (e) => {
-  masses.push({ x: e.clientX, y: e.clientY, mass: 50 });
+  const newMass = { x: e.clientX, y: e.clientY, mass: 50 };
+  masses.push(newMass);
+  console.log("New mass added:", newMass);
 
-  // Aggiungi particelle attorno alla nuova massa
+  // Aggiungi particelle intorno alla massa
   for (let i = 0; i < 10; i++) {
-    particles.push({
+    const newParticle = {
       x: e.clientX + Math.random() * 50 - 25,
       y: e.clientY + Math.random() * 50 - 25,
       vx: (Math.random() - 0.5) * 2,
       vy: (Math.random() - 0.5) * 2,
-    });
+    };
+    particles.push(newParticle);
+    console.log("New particle added:", newParticle);
   }
 });
 
