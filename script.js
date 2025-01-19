@@ -27,7 +27,8 @@ function createParticles() {
 // Disegna il testo descrittivo
 function drawDescription() {
   ctx.fillStyle = 'white';
-  ctx.font = '18px Arial';
+  ctx.font = '16px Arial';
+  ctx.textAlign = 'left'; // Allinea a sinistra
   ctx.fillText(
     'Simulazione dello spaziotempo: la massa centrale curva lo spazio e proietta particelle.',
     20,
