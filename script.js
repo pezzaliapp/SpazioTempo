@@ -9,8 +9,8 @@ const masses = [];
 const particles = [];
 const gridSize = 30;
 
-// Funzione per disegnare la griglia
-function drawGrid() {
+// Funzione per disegnare lo spaziotempo curvato
+function drawCurvedGrid() {
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
   for (let x = 0; x < canvas.width; x += gridSize) {
     for (let y = 0; y < canvas.height; y += gridSize) {
@@ -31,18 +31,8 @@ function drawGrid() {
   }
 }
 
-// Funzione per disegnare le masse
-function drawMasses() {
-  masses.forEach(mass => {
-    ctx.beginPath();
-    ctx.arc(mass.x, mass.y, mass.mass, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-  });
-}
-
 // Funzione per aggiornare e disegnare particelle
-function updateParticles() {
+function updateAndDrawParticles() {
   particles.forEach(particle => {
     let ax = 0, ay = 0;
 
@@ -70,31 +60,38 @@ function updateParticles() {
   });
 }
 
-// Aggiungi massa e particelle con un click
+// Funzione per disegnare le masse
+function drawMasses() {
+  masses.forEach(mass => {
+    ctx.beginPath();
+    ctx.arc(mass.x, mass.y, mass.mass, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+  });
+}
+
+// Aggiungi una massa e particelle con un click
 canvas.addEventListener('click', (e) => {
   const newMass = { x: e.clientX, y: e.clientY, mass: 50 };
   masses.push(newMass);
-  console.log("New mass added:", newMass);
 
   // Aggiungi particelle intorno alla massa
   for (let i = 0; i < 10; i++) {
-    const newParticle = {
+    particles.push({
       x: e.clientX + Math.random() * 50 - 25,
       y: e.clientY + Math.random() * 50 - 25,
       vx: (Math.random() - 0.5) * 2,
       vy: (Math.random() - 0.5) * 2,
-    };
-    particles.push(newParticle);
-    console.log("New particle added:", newParticle);
+    });
   }
 });
 
 // Loop di animazione
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawGrid();
+  drawCurvedGrid();
   drawMasses();
-  updateParticles();
+  updateAndDrawParticles();
   requestAnimationFrame(animate);
 }
 
