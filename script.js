@@ -87,9 +87,9 @@ function animate() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Sfondo trasparente per effetto scia
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawCentralMass();
-  drawOrbitingParticles();
-  drawRandomParticles();
+  drawCentralMass(); // Disegna la massa centrale
+  drawOrbitingParticles(); // Disegna le particelle in orbita
+  drawRandomParticles(); // Disegna le particelle casuali
 
   requestAnimationFrame(animate);
 }
