@@ -73,7 +73,7 @@ function drawParticles() {
     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     ctx.fill();
 
-    // Controlla se la particella esce dai bordi e la riporta al centro
+    // Controlla se la particella esce dai bordi e la riporta al centro 12_11
     if (
       particle.x < 0 ||
       particle.x > canvas.width ||
