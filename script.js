@@ -5,70 +5,36 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // Massa centrale
-const centralMass = { x: canvas.width / 2, y: canvas.height / 2, mass: 70 }; // Massa più piccola
+const centralMass = { x: canvas.width / 2, y: canvas.height / 2, radius: 50 };
 
-// Particelle in orbita
-const orbitingParticles = [];
-const randomParticles = [];
+// Particelle proiettate
+const particles = [];
 
-// Aggiungi particelle in orbita
-for (let i = 0; i < 5; i++) {
-  orbitingParticles.push({
-    angle: (Math.PI * 2 * i) / 5, // Angolo iniziale
-    distance: 150, // Distanza dall'orbita
-    speed: 0.02, // Velocità angolare
-    size: 5, // Dimensione particella
-    color: `hsl(${Math.random() * 360}, 100%, 50%)`, // Colore casuale
-  });
-}
-
-// Aggiungi particelle proiettate
-for (let i = 0; i < 100; i++) {
-  randomParticles.push({
-    x: centralMass.x,
-    y: centralMass.y,
-    vx: (Math.random() - 0.5) * 6, // Velocità orizzontale casuale
-    vy: (Math.random() - 0.5) * 6, // Velocità verticale casuale
-    size: 3, // Dimensione particella
-    color: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`, // Colore intenso
-  });
+// Funzione per creare particelle proiettate
+function createParticles() {
+  for (let i = 0; i < 100; i++) {
+    particles.push({
+      x: centralMass.x,
+      y: centralMass.y,
+      vx: (Math.random() - 0.5) * 8, // Velocità iniziale casuale
+      vy: (Math.random() - 0.5) * 8,
+      size: 3, // Dimensione particella
+      color: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+    });
+  }
 }
 
 // Disegna la massa centrale
 function drawCentralMass() {
-  const gradient = ctx.createRadialGradient(
-    centralMass.x,
-    centralMass.y,
-    0,
-    centralMass.x,
-    centralMass.y,
-    centralMass.mass
-  );
-  gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-  gradient.addColorStop(1, 'rgba(138, 43, 226, 0.5)'); // Colore viola
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = 'rgba(138, 43, 226, 1)'; // Viola
   ctx.beginPath();
-  ctx.arc(centralMass.x, centralMass.y, centralMass.mass, 0, Math.PI * 2);
+  ctx.arc(centralMass.x, centralMass.y, centralMass.radius, 0, Math.PI * 2);
   ctx.fill();
 }
 
-// Disegna particelle in orbita
-function drawOrbitingParticles() {
-  orbitingParticles.forEach(particle => {
-    particle.angle += particle.speed; // Aggiorna angolo
-    const x = centralMass.x + Math.cos(particle.angle) * particle.distance;
-    const y = centralMass.y + Math.sin(particle.angle) * particle.distance;
-
-    ctx.fillStyle = particle.color;
-    ctx.beginPath();
-    ctx.arc(x, y, particle.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-// Disegna particelle proiettate con scia
-function drawRandomParticles() {
-  randomParticles.forEach(particle => {
+// Disegna particelle con scie
+function drawParticles() {
+  particles.forEach(particle => {
     // Aggiorna posizione
     particle.x += particle.vx;
     particle.y += particle.vy;
@@ -79,32 +45,33 @@ function drawRandomParticles() {
     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     ctx.fill();
 
-    // Controlla se la particella esce dai bordi e la riporta al centro
+    // Controlla se la particella esce dai bordi
     if (
       particle.x < 0 ||
       particle.x > canvas.width ||
       particle.y < 0 ||
       particle.y > canvas.height
     ) {
-      particle.x = centralMass.x;
+      particle.x = centralMass.x; // Riporta al centro
       particle.y = centralMass.y;
-      particle.vx = (Math.random() - 0.5) * 6; // Reimposta velocità
-      particle.vy = (Math.random() - 0.5) * 6; // Reimposta velocità
+      particle.vx = (Math.random() - 0.5) * 8; // Nuova velocità casuale
+      particle.vy = (Math.random() - 0.5) * 8;
     }
   });
 }
 
 // Loop di animazione
 function animate() {
-  // Pulizia del canvas con trasparenza ridotta per una scia più visibile
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  // Sfondo con trasparenza per le scie
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawCentralMass(); // Disegna la massa centrale
-  drawOrbitingParticles(); // Disegna particelle in orbita
-  drawRandomParticles(); // Disegna particelle proiettate
+  drawParticles(); // Disegna particelle con scia
 
   requestAnimationFrame(animate);
 }
 
+// Inizializza particelle e avvia animazione
+createParticles();
 animate();
