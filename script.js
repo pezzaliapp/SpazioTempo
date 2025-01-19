@@ -51,30 +51,6 @@ function drawCentralMass() {
   ctx.fill();
 }
 
-// Disegna la griglia curva
-function drawSpacetimeCurvature() {
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; // Linee bianche trasparenti
-  ctx.lineWidth = 0.5; // Linee sottili
-
-  for (let x = 0; x < canvas.width; x += 20) {
-    for (let y = 0; y < canvas.height; y += 20) {
-      const dx = centralMass.x - x;
-      const dy = centralMass.y - y;
-      const distance = Math.sqrt(dx ** 2 + dy ** 2) || 1;
-
-      // Calcola lo spostamento causato dalla massa
-      const force = centralMass.mass / distance ** 2;
-      const offsetX = dx / distance * force * 10;
-      const offsetY = dy / distance * force * 10;
-
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + offsetX, y + offsetY);
-      ctx.stroke();
-    }
-  }
-}
-
 // Disegna particelle in orbita
 function drawOrbitingParticles() {
   orbitingParticles.forEach(particle => {
@@ -111,7 +87,6 @@ function animate() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Sfondo trasparente per effetto scia
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawSpacetimeCurvature(); // Disegna la griglia curva
   drawCentralMass(); // Disegna la massa centrale
   drawOrbitingParticles(); // Disegna le particelle in orbita
   drawRandomParticles(); // Disegna le particelle casuali
