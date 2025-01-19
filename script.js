@@ -18,8 +18,8 @@ function createParticles() {
       y: centralMass.y,
       vx: (Math.random() - 0.5) * 6, // Velocità casuale
       vy: (Math.random() - 0.5) * 6,
-      size: Math.random() * 3 + 1, // Dimensione casuale tra 1 e 4
-      color: 'rgba(255, 255, 255, 0.8)', // Particelle bianche semi-trasparenti
+      size: Math.random() * 2 + 1, // Dimensione tra 1 e 3
+      color: 'rgba(255, 255, 255, 0.8)', // Bianco semi-trasparente
     });
   }
 }
@@ -27,9 +27,9 @@ function createParticles() {
 // Disegna il testo descrittivo
 function drawDescription() {
   ctx.fillStyle = 'white';
-  ctx.font = '16px Arial';
+  ctx.font = '18px Arial';
   ctx.fillText(
-    'Simulazione dello spaziotempo: La massa centrale curva lo spazio e proietta particelle.',
+    'Simulazione dello spaziotempo: la massa centrale curva lo spazio e proietta particelle.',
     20,
     30
   );
