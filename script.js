@@ -7,34 +7,23 @@ canvas.height = window.innerHeight;
 // Massa centrale
 const centralMass = { x: canvas.width / 2, y: canvas.height / 2, mass: 150 };
 
-// Particelle orbitanti
+// Particelle in orbita
 const orbitingParticles = [];
 
 // Aggiungi particelle in orbita
 for (let i = 0; i < 5; i++) {
-  const angle = (Math.PI * 2 * i) / 5;
   orbitingParticles.push({
-    angle: angle,
-    distance: 200, // Distanza costante dall'orbita
-    speed: 0.02 + Math.random() * 0.01, // Velocità angolare
-    size: 5, // Dimensione della particella
-    color: `hsl(${Math.random() * 360}, 100%, 50%)`, // Colore casuale
+    angle: (Math.PI * 2 * i) / 5, // Angolo iniziale
+    distance: 200, // Distanza dall'orbita
+    speed: 0.02, // Velocità angolare
+    size: 5, // Dimensione particella
+    color: 'white', // Colore delle particelle
   });
 }
 
 // Disegna la massa centrale
 function drawCentralMass() {
-  const gradient = ctx.createRadialGradient(
-    centralMass.x,
-    centralMass.y,
-    0,
-    centralMass.x,
-    centralMass.y,
-    centralMass.mass
-  );
-  gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-  gradient.addColorStop(1, 'rgba(138, 43, 226, 0.5)'); // Colore viola
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = 'white';
   ctx.beginPath();
   ctx.arc(centralMass.x, centralMass.y, centralMass.mass, 0, Math.PI * 2);
   ctx.fill();
@@ -56,8 +45,8 @@ function drawOrbitingParticles() {
 
 // Loop di animazione
 function animate() {
-  // Sfondo nero
-  ctx.fillStyle = 'rgba(0, 0, 0, 1)'; // Colore di sfondo opaco
+  // Pulizia del canvas
+  ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawCentralMass(); // Disegna la massa centrale
