@@ -5,7 +5,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // Massa centrale
-const centralMass = { x: canvas.width / 2, y: canvas.height / 2, mass: 80 }; // Massa ridimensionata
+const centralMass = { x: canvas.width / 2, y: canvas.height / 2, mass: 70 }; // Massa più piccola
 
 // Particelle in orbita
 const orbitingParticles = [];
@@ -23,14 +23,14 @@ for (let i = 0; i < 5; i++) {
 }
 
 // Aggiungi particelle proiettate
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 100; i++) {
   randomParticles.push({
     x: centralMass.x,
     y: centralMass.y,
-    vx: (Math.random() - 0.5) * 5, // Velocità orizzontale casuale
-    vy: (Math.random() - 0.5) * 5, // Velocità verticale casuale
+    vx: (Math.random() - 0.5) * 6, // Velocità orizzontale casuale
+    vy: (Math.random() - 0.5) * 6, // Velocità verticale casuale
     size: 3, // Dimensione particella
-    color: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`, // Colore trasparente
+    color: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`, // Colore intenso
   });
 }
 
@@ -79,16 +79,25 @@ function drawRandomParticles() {
     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     ctx.fill();
 
-    // Disegna scia sfumata
-    ctx.fillStyle = `rgba(0, 0, 0, 0.1)`; // Colore sfumato
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Controlla se la particella esce dai bordi e la riporta al centro
+    if (
+      particle.x < 0 ||
+      particle.x > canvas.width ||
+      particle.y < 0 ||
+      particle.y > canvas.height
+    ) {
+      particle.x = centralMass.x;
+      particle.y = centralMass.y;
+      particle.vx = (Math.random() - 0.5) * 6; // Reimposta velocità
+      particle.vy = (Math.random() - 0.5) * 6; // Reimposta velocità
+    }
   });
 }
 
 // Loop di animazione
 function animate() {
-  // Pulizia del canvas con trasparenza per la scia
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+  // Pulizia del canvas con trasparenza ridotta per una scia più visibile
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   drawCentralMass(); // Disegna la massa centrale
