@@ -4,36 +4,34 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Massa principale e particelle
-const centralMass = { x: canvas.width / 2, y: canvas.height / 2, mass: 150 }; // Massa centrale
-const orbitingParticles = []; // Particelle in orbita
-const randomParticles = []; // Particelle casuali
+// Massa centrale
+const centralMass = { x: canvas.width / 2, y: canvas.height / 2, mass: 150 };
 
-// Aggiungi particelle in orbita
-for (let i = 0; i < 5; i++) {
-  const angle = (Math.PI * 2 * i) / 5;
-  orbitingParticles.push({
-    angle: angle,
-    distance: 200 + Math.random() * 50, // Distanza dall'orbita
-    speed: 0.02 + Math.random() * 0.01, // Velocità angolare
-    size: 5 + Math.random() * 3, // Dimensione della particella
-    color: `hsl(${Math.random() * 360}, 100%, 50%)`, // Colore casuale
-  });
+// Disegna la griglia curva
+function drawSpacetimeCurvature() {
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; // Linee sottili trasparenti
+  ctx.lineWidth = 1;
+
+  for (let x = 0; x < canvas.width; x += 30) {
+    for (let y = 0; y < canvas.height; y += 30) {
+      const dx = centralMass.x - x;
+      const dy = centralMass.y - y;
+      const distance = Math.sqrt(dx ** 2 + dy ** 2) || 1; // Evita divisioni per zero
+
+      // Deformazione causata dalla massa centrale
+      const force = centralMass.mass / distance ** 1.5;
+      const offsetX = dx / distance * force;
+      const offsetY = dy / distance * force;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + offsetX, y + offsetY);
+      ctx.stroke();
+    }
+  }
 }
 
-// Aggiungi particelle casuali
-for (let i = 0; i < 50; i++) {
-  randomParticles.push({
-    x: centralMass.x,
-    y: centralMass.y,
-    vx: (Math.random() - 0.5) * 3,
-    vy: (Math.random() - 0.5) * 3,
-    size: 2,
-    color: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.6)`,
-  });
-}
-
-// Disegna la massa centrale con alone
+// Disegna la massa centrale
 function drawCentralMass() {
   const gradient = ctx.createRadialGradient(
     centralMass.x,
@@ -52,9 +50,9 @@ function drawCentralMass() {
 }
 
 // Disegna particelle in orbita
-function drawOrbitingParticles() {
-  orbitingParticles.forEach(particle => {
-    particle.angle += particle.speed; // Aggiorna angolo
+function drawOrbitingParticles(particles) {
+  particles.forEach(particle => {
+    particle.angle += particle.speed; // Aggiorna l'angolo
     const x = centralMass.x + Math.cos(particle.angle) * particle.distance;
     const y = centralMass.y + Math.sin(particle.angle) * particle.distance;
 
@@ -65,20 +63,16 @@ function drawOrbitingParticles() {
   });
 }
 
-// Disegna e aggiorna particelle casuali
-function drawRandomParticles() {
-  randomParticles.forEach(particle => {
-    particle.x += particle.vx;
-    particle.y += particle.vy;
-
-    ctx.fillStyle = particle.color;
-    ctx.beginPath();
-    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Aggiungi scia
-    ctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+// Aggiungi particelle in orbita
+const orbitingParticles = [];
+for (let i = 0; i < 5; i++) {
+  const angle = (Math.PI * 2 * i) / 5;
+  orbitingParticles.push({
+    angle: angle,
+    distance: 200 + Math.random() * 50,
+    speed: 0.02 + Math.random() * 0.01,
+    size: 5 + Math.random() * 3,
+    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
   });
 }
 
@@ -87,9 +81,9 @@ function animate() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Sfondo trasparente per effetto scia
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawCentralMass();
-  drawOrbitingParticles();
-  drawRandomParticles();
+  drawSpacetimeCurvature(); // Disegna la curvatura
+  drawCentralMass(); // Disegna la massa centrale
+  drawOrbitingParticles(orbitingParticles); // Disegna le particelle in orbita
 
   requestAnimationFrame(animate);
 }
