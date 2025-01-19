@@ -9,7 +9,7 @@ const particles = []; // Contiene tutte le particelle
 
 // Disegna lo spaziotempo curvato
 function drawGrid() {
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+  ctx.strokeStyle = 'rgba(0, 100, 255, 0.1)'; // Colore blu chiaro
   for (let x = 0; x < canvas.width; x += 30) {
     for (let y = 0; y < canvas.height; y += 30) {
       let offsetX = 0;
@@ -32,17 +32,27 @@ function drawGrid() {
   }
 }
 
-// Disegna le masse
+// Disegna le masse con un effetto luminoso
 function drawMasses() {
   masses.forEach(mass => {
+    // Alone luminoso
+    const gradient = ctx.createRadialGradient(mass.x, mass.y, 0, mass.x, mass.y, mass.mass * 2);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(1, 'rgba(0, 0, 255, 0.2)');
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(mass.x, mass.y, mass.mass, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Massa centrale
+    ctx.fillStyle = 'white';
     ctx.beginPath();
     ctx.arc(mass.x, mass.y, mass.mass / 2, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
     ctx.fill();
   });
 }
 
-// Disegna e aggiorna le particelle
+// Disegna e aggiorna le particelle con scia
 function drawParticles() {
   particles.forEach(particle => {
     let ax = 0;
@@ -63,21 +73,21 @@ function drawParticles() {
     particle.x += particle.vx;
     particle.y += particle.vy;
 
-    // Disegna la particella
+    // Disegna la scia della particella
+    ctx.fillStyle = `rgba(255, ${Math.floor(200 + Math.sin(particle.x * 0.01) * 55)}, 0, 0.6)`;
     ctx.beginPath();
     ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
-    ctx.fillStyle = 'yellow';
     ctx.fill();
   });
 }
 
 // Aggiungi massa e particelle con il click
 canvas.addEventListener('click', (e) => {
-  const mass = { x: e.clientX, y: e.clientY, mass: 100 };
+  const mass = { x: e.clientX, y: e.clientY, mass: 80 };
   masses.push(mass);
 
-  // Aggiungi particelle attorno alla nuova massa
-  for (let i = 0; i < 20; i++) {
+  // Aggiungi particelle intorno alla nuova massa
+  for (let i = 0; i < 30; i++) {
     particles.push({
       x: e.clientX + Math.random() * 100 - 50,
       y: e.clientY + Math.random() * 100 - 50,
@@ -87,9 +97,10 @@ canvas.addEventListener('click', (e) => {
   }
 });
 
-// Loop di animazione
+// Loop di animazione con scia
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Sfondo nero trasparente per creare la scia
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawGrid();
   drawMasses();
   drawParticles();
