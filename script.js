@@ -9,8 +9,8 @@ const masses = [];
 const particles = [];
 const gridSize = 30;
 
-// Funzione per disegnare lo spaziotempo curvato
-function drawCurvedGrid() {
+// Disegna la griglia deformata
+function drawGrid() {
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
   for (let x = 0; x < canvas.width; x += gridSize) {
     for (let y = 0; y < canvas.height; y += gridSize) {
@@ -31,8 +31,8 @@ function drawCurvedGrid() {
   }
 }
 
-// Funzione per aggiornare e disegnare particelle
-function updateAndDrawParticles() {
+// Aggiorna e disegna le particelle
+function updateParticles() {
   particles.forEach(particle => {
     let ax = 0, ay = 0;
 
@@ -60,7 +60,7 @@ function updateAndDrawParticles() {
   });
 }
 
-// Funzione per disegnare le masse
+// Disegna le masse
 function drawMasses() {
   masses.forEach(mass => {
     ctx.beginPath();
@@ -70,7 +70,7 @@ function drawMasses() {
   });
 }
 
-// Aggiungi una massa e particelle con un click
+// Aggiungi una massa con il click
 canvas.addEventListener('click', (e) => {
   const newMass = { x: e.clientX, y: e.clientY, mass: 50 };
   masses.push(newMass);
@@ -89,9 +89,9 @@ canvas.addEventListener('click', (e) => {
 // Loop di animazione
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCurvedGrid();
+  drawGrid();
   drawMasses();
-  updateAndDrawParticles();
+  updateParticles();
   requestAnimationFrame(animate);
 }
 
